@@ -15,7 +15,7 @@ export const useUserStore = defineStore("token", {
     getToken: (state): string | null => state.token,
     getIsLoggedIn: (state): boolean => state.isLoggedIn,
     getUserInfo: (state): { name: string; age: number } => {
-      // TODO 返回用户信息
+      // TODO 返回用户信息 登录时就存储用户信息，是个json对象userInfo
       return {
         name: "张三",
         age: 18,

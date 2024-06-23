@@ -1,7 +1,7 @@
 <template>
   <el-container class="login-container">
     <el-header>
-      <h2>登录</h2>
+      <h2>用户登录</h2>
     </el-header>
     <el-main>
       <el-form
@@ -32,13 +32,10 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@/store/userStore";
-import axios from "axios";
 import { ElMessage } from "element-plus";
-import { APIURL } from "@/global/config";
+import { userLogIn } from "@/global/utils";
 
 const router = useRouter();
-const tokenStore = useUserStore();
 
 const loginFormRef = ref<any>(null); // 显式指定 ref 的类型为 any
 const loginForm = reactive({
@@ -51,30 +48,19 @@ const rules = {
   password: [{ required: true, message: "请输入密码", trigger: "blur" }],
 };
 
-const onSubmit = () => {
+const onSubmit = async () => {
   if (loginFormRef.value) {
     // 进行表单验证
-    loginFormRef.value.validate().then((valid: boolean) => {
-      if (valid) {
-        // 表单验证通过，执行登录请求
-        axios
-          .post(APIURL.login, loginForm)
-          .then((res) => {
-            console.log(res.data);
-            ElMessage.success("登录成功");
-            // 处理登录成功逻辑
-            tokenStore.setToken(res.data.token);
-            router.push("/");
-          })
-          .catch((err) => {
-            console.error(err);
-            ElMessage.error("登录失败");
-            // 处理登录失败逻辑
-          });
-      } else {
-        ElMessage.error("表单验证失败");
+    const valid = await loginFormRef.value.validate();
+    if (valid) {
+      // 表单验证通过，执行登录请求
+      const loginSuccess = await userLogIn(loginForm);
+      if (loginSuccess) {
+        router.push("/");
       }
-    });
+    } else {
+      ElMessage.error("表单验证失败");
+    }
   }
 };
 </script>

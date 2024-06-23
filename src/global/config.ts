@@ -1,5 +1,8 @@
 // 全局APIURL配置
-const BASEURL = "//192.168.31.37:8080/api";
+const BASEURL = "//192.168.31.37:8080";
 export const APIURL = {
-  login: BASEURL + "/users/login",
+  login: BASEURL + "/api/users/login",
+  logout: BASEURL + "/api/users/logout",
+  product: BASEURL + "/api/product",
+  image: BASEURL + "/image/",
 };
