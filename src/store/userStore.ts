@@ -1,41 +1,47 @@
 import { defineStore } from "pinia";
 
-interface TokenState {
-  token: string | null;
-  isLoggedIn: boolean;
+interface User {
+  username: string;
+  default_address: string | null;
+  phone_number: string;
+  token: string;
 }
 
-export const useUserStore = defineStore("token", {
-  state: (): TokenState => ({
-    token: localStorage.getItem("token"),
-    isLoggedIn: !!localStorage.getItem("token"), // 根据 token 的有无初始化登录状态
+export const useUserStore = defineStore("user", {
+  state: () => ({
+    user: localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user")!)
+      : null,
+    isLoggedIn: !!localStorage.getItem("user"), // 根据 user 的有无初始化登录状态
   }),
   getters: {
-    // !在Vue3和Pinia中，getter调用起来是属性而不是方法
-    getToken: (state): string | null => state.token,
-    getIsLoggedIn: (state): boolean => state.isLoggedIn,
-    getUserInfo: (state): { name: string; age: number } => {
-      // TODO 返回用户信息 登录时就存储用户信息，是个json对象userInfo
-      return {
-        name: "张三",
-        age: 18,
-      };
-    },
+    getUser: (state) => state.user,
+    getIsLoggedIn: (state) => state.isLoggedIn,
+    getToken: (state) => state.user?.token || null, // 获取token的getter
   },
   actions: {
-    setToken(token: string) {
-      this.token = token;
+    setUser(data: { token: string; user: Omit<User, 'token'> }) {
+      const user = { ...data.user, token: data.token };
+      this.user = user;
       this.isLoggedIn = true; // 登录状态为 true
-      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+    },
+    clearUser() {
+      this.user = null;
+      this.isLoggedIn = false; // 登录状态为 false
+      localStorage.removeItem("user");
+    },
+    updateToken(token: string) {
+      if (this.user) {
+        this.user.token = token;
+        localStorage.setItem("user", JSON.stringify(this.user));
+      }
     },
     clearToken() {
-      this.token = null;
-      this.isLoggedIn = false; // 登录状态为 false
-      localStorage.removeItem("token");
-    },
-    // 手动设置登录状态,在请求后端接口后使用
-    updateLoginStatus(isLoggedIn: boolean) {
-      this.isLoggedIn = isLoggedIn;
+      if (this.user) {
+        this.user.token = '';
+        localStorage.setItem("user", JSON.stringify(this.user));
+      }
     },
   },
 });

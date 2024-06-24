@@ -12,7 +12,7 @@ export const userLogIn = async (loginForm: any): Promise<boolean> => {
     console.log(res.data);
     ElMessage.success("登录成功");
     // 处理登录成功逻辑
-    userStore.setToken(res.data.token);
+    userStore.setUser(res.data);
     return true;
   } catch (err) {
     console.error(err);
@@ -27,14 +27,14 @@ export const userLogOut = async (): Promise<boolean> => {
 
   try {
     await axios
-      .post(APIURL.logout, {}, { headers: { token: userStore.getToken } })
+      .post(APIURL.logout, {}, { headers: {'token': userStore.getToken} }) // 添加请求头
       .then((res) => {
         console.log(res.data);
       });
 
     ElMessage.success("退出登录成功");
     // 处理退出登录成功逻辑
-    userStore.clearToken();
+    userStore.clearUser();
     return true;
   } catch (err) {
     console.error(err);

@@ -3,6 +3,7 @@
     <img :src="product.photo" class="image" />
     <div style="padding: 14px">
       <span>{{ product.productName }}</span>
+      <div class="description">{{ product.description }}</div> <!-- 添加描述 -->
       <div class="bottom clearfix">
         <span class="price">￥{{ product.singlePrice }}</span>
         <el-button type="primary" @click="addToCart(product)">
@@ -14,18 +15,12 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-import { APIURL } from "@/global/config";
-import { computed } from "vue";
-
 const props = defineProps({
   product: {
     type: Object,
     required: true,
   },
 });
-
-
 
 const addToCart = (product) => {
   console.log(`商品 ${product.productName} 已添加到购物车`);
@@ -41,6 +36,12 @@ const addToCart = (product) => {
   width: 100%;
   height: 200px;
   object-fit: cover;
+}
+
+.description {
+  margin-top: 10px; /* 增加描述的上边距 */
+  color: #888;
+  font-size: 14px;
 }
 
 .price {

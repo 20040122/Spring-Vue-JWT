@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 
-import router from './router';
+import router from './router'; // 注册路由
 import { createPinia } from 'pinia';
 
 import ElementPlus from "element-plus";
