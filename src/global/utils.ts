@@ -65,6 +65,9 @@ export const updateUserProfile = async (profileForm: any): Promise<boolean> => {
   try {
     const res = await axiosInstance.post(APIURL.updateUser, profileForm);
     console.log(res.data);
+    // 同时更新本地用户信息
+    const userStore = useUserStore();
+    userStore.updateUserProfile(profileForm);
 
     ElMessage.success("更新用户信息成功");
     // 处理更新用户信息成功逻辑
@@ -95,3 +98,50 @@ export const updateUserPassword = async (
     return false;
   }
 };
+
+// 提交订单
+interface OrderItem {
+  [productId: string]: number;
+}
+
+interface OrderRequestBody {
+  delivery_address: string;
+  order_item: OrderItem;
+}
+
+export async function submitOrder(
+  address: string,
+  orderItem: OrderItem
+): Promise<void> {
+  const requestBody: OrderRequestBody = {
+    delivery_address: address,
+    order_item: orderItem,
+  };
+  try {
+    if (await axiosInstance.post(APIURL.createOrder, requestBody)) {
+      ElMessage.success("订单提交成功");
+    }
+  } catch (error) {
+    ElMessage.error("订单提交失败");
+  }
+}
+
+//根据订单号获取订单信息
+export async function checkOrder(orderId: string): Promise<any> {
+  try {
+    const res = await axiosInstance.post(APIURL.checkOrder, {
+      order_id: orderId,
+    });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    ElMessage.error("获取订单信息失败");
+    return {
+      order_id: "",
+      order_status: "",
+      order_item: {},
+      delivery_address: "",
+      create_time: "",
+    };
+  }
+}

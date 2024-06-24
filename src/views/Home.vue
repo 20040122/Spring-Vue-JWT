@@ -30,7 +30,9 @@
           </el-col>
         </el-row>
       </el-main>
-      <el-footer class="footer"> Footer内容 </el-footer>
+      <el-footer class="footer">
+        <CartFooter />
+      </el-footer>
     </el-container>
   </el-container>
 </template>
@@ -38,6 +40,7 @@
 <script lang="ts" setup>
 import { ref, computed,onMounted } from "vue";
 import ProductCard from "@/components/ProductCard.vue";
+import CartFooter from "@/components/CartFooter.vue";
 import axios from "axios";
 import { APIURL } from "@/global/config";
 
@@ -90,6 +93,10 @@ body {
   overflow: hidden;
 }
 
+.footer{
+  padding: 0;
+}
+
 .aside {
   overflow-y: auto; /* 如果分类菜单项过多可以滚动 */
   border-right: 1px solid #ebebeb; /* 增加一个右边框，分割内容 */
@@ -100,13 +107,6 @@ body {
   padding: 20px;
   height: calc(100vh - 80px - 60px); /* 减去header和footer的高度 */
   box-sizing: border-box; /* 包含内边距和边框在总高度和宽度内 */
-}
-
-.footer {
-  padding: 10px;
-  text-align: center;
-  height: 60px;
-  border: 1px solid red;
 }
 
 /* 自定义滚动条样式 */

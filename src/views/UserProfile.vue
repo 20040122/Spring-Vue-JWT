@@ -58,10 +58,7 @@ const password = ref({
 const confirmNewPassword = ref("");
 
 const updateUserInfo = async () => {
-  const success = await updateUserProfile(user.value);
-  if (success) {
-    ElMessage.success("用户信息更新成功");
-  }
+  await updateUserProfile(user.value);
 };
 
 const updatePassword = async () => {

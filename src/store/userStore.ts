@@ -1,4 +1,3 @@
-import { updateUserProfile } from "@/global/utils";
 import { defineStore } from "pinia";
 
 interface User {

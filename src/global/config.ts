@@ -1,5 +1,5 @@
-// 全局APIURL配置
-const BASEURL = "//192.168.31.178:8080";
+// !全局APIURL配置
+const BASEURL = "//localhost:8080";
 export const APIURL = {
   // 用户相关
   login: BASEURL + "/api/users/login",
@@ -11,4 +11,9 @@ export const APIURL = {
   // 商品相关
   product: BASEURL + "/api/product",
   image: BASEURL + "/image/",
+  
+  // 订单相关
+  fetchOrders: BASEURL + "/api/orders/fetchOrders",
+  createOrder: BASEURL + "/api/orders/createOrder",
+  checkOrder: BASEURL + "/api/orders/checkOrder",
 };

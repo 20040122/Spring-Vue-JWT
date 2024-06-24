@@ -1,6 +1,13 @@
 <template>
   <el-header class="header">
     <el-page-header @back="goBack">
+
+      <template #breadcrumb>
+        <el-breadcrumb separator="/">
+            <el-link type="primary" @click="goToHome">返回首页</el-link>
+        </el-breadcrumb>
+      </template>
+
       <template #content>
         <div class="page-title">生鲜速递</div>
       </template>
@@ -11,6 +18,7 @@
           <el-text class="mx-1">欢迎您,</el-text>
           <el-text class="mx-1" type="primary">{{ user.username }}</el-text>
           <el-divider direction="vertical" />
+          <el-button type="primary" @click="goToMyOrders">我的订单</el-button>
           <el-button type="primary" @click="goToProfile">个人中心</el-button>
           <el-button type="danger" @click="onLogout">退出登录</el-button>
         </template>
@@ -36,8 +44,16 @@ const userStore = useUserStore();
 const isLoggedIn = computed(() => userStore.getIsLoggedIn);
 const user = computed(() => userStore.getUser);
 
+const goToHome = () => {
+  router.push("/");
+};
+
 const goBack = () => {
   router.back();
+};
+
+const goToMyOrders = () => {
+  router.push("/orders");
 };
 
 const handleLogin = () => {
