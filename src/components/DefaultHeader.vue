@@ -27,7 +27,6 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { computed } from "vue";
-import { ElMessage } from "element-plus";
 import { useUserStore } from "@/store/userStore";
 import { userLogOut } from "@/global/utils";
 

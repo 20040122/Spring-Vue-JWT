@@ -36,11 +36,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed,onMounted } from "vue";
 import ProductCard from "@/components/ProductCard.vue";
 import axios from "axios";
 import { APIURL } from "@/global/config";
-import { useUserStore } from "@/store/userStore";
 
 const products = ref([
   // 默认值
@@ -59,17 +58,19 @@ const categories = ref([
 const selectedCategoryIndex = ref(0);
 
 // 请求后端产品接口
-axios.get(APIURL.product).then((res) => {
-  console.log(res.data);
-  products.value = res.data;
+onMounted(() => {
+  axios.get(APIURL.product).then((res) => {
+    console.log(res.data);
+    products.value = res.data;
 
-  // 计算所有的产品种类
-  const kinds = new Set(products.value.map((product) => product.kind));
-  categories.value = Array.from(kinds);
+    // 计算所有的产品种类
+    const kinds = new Set(products.value.map((product) => product.kind));
+    categories.value = Array.from(kinds);
 
-  // 替换图片路径
-  products.value.forEach((product) => {
-    product.photo = APIURL.image + product.photo;
+    // 替换图片路径
+    products.value.forEach((product) => {
+      product.photo = APIURL.image + product.photo;
+    });
   });
 });
 
@@ -79,9 +80,7 @@ const handleSelect = (key: string) => {
 
 const selectedCategoryProducts = computed(() => {
   const selectedCategory = categories.value[selectedCategoryIndex.value];
-  return products.value.filter(
-    (product) => product.kind === selectedCategory
-  );
+  return products.value.filter((product) => product.kind === selectedCategory);
 });
 </script>
 

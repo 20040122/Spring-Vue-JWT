@@ -1,3 +1,4 @@
+import { updateUserProfile } from "@/global/utils";
 import { defineStore } from "pinia";
 
 interface User {
@@ -20,27 +21,38 @@ export const useUserStore = defineStore("user", {
     getToken: (state) => state.user?.token || null, // 获取token的getter
   },
   actions: {
-    setUser(data: { token: string; user: Omit<User, 'token'> }) {
+    setUser(data: { token: string; user: Omit<User, "token"> }) {
       const user = { ...data.user, token: data.token };
       this.user = user;
       this.isLoggedIn = true; // 登录状态为 true
       localStorage.setItem("user", JSON.stringify(user));
+      return true;
     },
     clearUser() {
       this.user = null;
       this.isLoggedIn = false; // 登录状态为 false
       localStorage.removeItem("user");
+      return true;
+    },
+    updateUserProfile(profileForm: any) {
+      this.user.username = profileForm.username;
+      this.user.phone_number = profileForm.phone_number;
+      this.user.default_address = profileForm.default_address;
+      localStorage.setItem("user", JSON.stringify(this.user));
+      return true;
     },
     updateToken(token: string) {
       if (this.user) {
         this.user.token = token;
         localStorage.setItem("user", JSON.stringify(this.user));
+        return true;
       }
     },
     clearToken() {
       if (this.user) {
-        this.user.token = '';
+        this.user.token = "";
         localStorage.setItem("user", JSON.stringify(this.user));
+        return true;
       }
     },
   },
