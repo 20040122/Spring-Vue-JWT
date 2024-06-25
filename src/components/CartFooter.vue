@@ -32,9 +32,10 @@
         <el-button
           type="primary"
           @click="checkout"
-          :disabled="selectedProductsAmount === 0"
+          :disabled="selectedProductsAmount === 0 || userStore.getIsLoggedIn === false"
         >
-          去结算
+          <span v-if="userStore.getIsLoggedIn === false">请登录</span>
+          <span v-else>去结算</span>
         </el-button>
       </el-col>
     </el-row>
@@ -44,8 +45,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useCartStore } from "@/store/cartStore";
+import { useUserStore } from "@/store/userStore";
 import router from "@/router";
 
+
+const userStore = useUserStore();
 const cartStore = useCartStore();
 
 // 选择的商品类数量
